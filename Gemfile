@@ -2,7 +2,6 @@ source 'http://rubygems.org'
 
 ruby '1.9.3'
 gem 'sinatra'
-require 'sinatra'
 gem "bson_ext", "1.6.4"
 gem 'json'
 gem 'haml'
