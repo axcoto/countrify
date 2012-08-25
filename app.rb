@@ -14,7 +14,6 @@ require 'date'
 def get_connection
   return @db if @db
   if ENV['MONGOLAB_URI']
-    #mongodb://heroku_app6870207:jc09imprmq9qks1nru81cvqsh3@ds029827-b.mongolab.com:29827/heroku_app6870207
     uri = ENV['MONGOLAB_URI']
   else
     uri = "mongodb://localhost:27017/visitors"
@@ -28,8 +27,7 @@ end
 
 configure do
 	set :logging, :true
-	set :CLIENT_ID => 'd00b37e0fbf1488e8d49', :CLIENT_SECRET => '971ba392a08327aaa02b598ac71bc9258c1314cd'
- 
+	
   # same as `set :option, true`
   enable :option
 
@@ -98,7 +96,10 @@ get '/:api_key/hit' do
 
   node.each do |country, hit| 
   end
-  chart_url = "http://chart.apis.google.com/chart?chs=300x225&cht=p&chds=a&chdl=#{node.keys.join('|')}&chd=t:#{node.values.join(',')}"
+  size = params[:s] || "300x225"
+  chart_url = "http://chart.apis.google.com/chart?chs=#{size}&cht=p&chds=a&chdl=#{node.keys.join('|')}&chd=t:#{node.values.join(',')}"
+  redirect URI.encode(chart_url)
+  #params.inspect
   #haml :hit, :layout => false, :locals => {:c => c, :api => params[:api_key], :stats => node}
 end
 
