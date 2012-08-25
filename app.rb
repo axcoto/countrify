@@ -61,28 +61,45 @@ get '/:api_key/hit' do
   db = get_connection
   now = DateTime.now
   c = GeoIP.new('GeoIP.dat').country(request.ip)
-  
+#node = stats.find(:api => params[:api_key]).first
+#  if node 
+#    node[:country][c.country_code2] ||= 0
+#    node[:country][c.country_code2] += 1    
+#    stats.update({ :_id => note[:_id] }, note) 
+#  else 
+#    node = {
+#      :api => params[:api_key],
+#      :country => {c.country_code2 => 1}
+#    }
+#    stats.insert(node)  
+#  end
+#summary
+#db.visitors.update({api: 'axcoto'}, {$inc: {vn: 1}}, true);
   hits = db.collection('hits');
-  stats = db.collection('summaries');
-  node = stats.find(:api => params[:api_key]).first
-  if node 
-    node[:country][c.country_code2] ||= 0
-    node[:country][c.country_code2] += 1    
-    stats.update({ :_id => note[:_id] }, note) 
-  else 
-    node = {
-      :api => params[:api_key],
-      :country => {c.country_code2 => 1}
-    }
-    stats.insert(node)  
-  end
   hits.insert({
     :api => params[:api_key],
     :ip => request.ip, 
     :time => {:hour => now.hour, :min => now.min, :sec => now.sec}, 
     :country => {:code2 => c.country_code2, :name => c.country_name} 
   })
-  haml :hit, :layout => false, :locals => {:c => c, :api => params[:api_key]}
+
+  stats = db.collection('summaries'); 
+  stats.update({:api => params[:api_key]}, {:$inc => {c.country_code2 => 1}}, {:upsert => true})  
+  node = stats.find(:api => params[:api_key]).first
+  node.delete_if {|k,v| k=='api' || k=='_id'}
+  total_hit = 0; 
+  node.each { |k, v| total_hit += v }
+  
+  # node.each do |country, hit|
+  #   node[country] = {
+  #     :hit => hit, :percent => (hit.to_f / total_hit.to_f * 100).round(0)
+  #   }
+  # end
+
+  node.each do |country, hit| 
+  end
+  chart_url = "http://chart.apis.google.com/chart?chs=300x225&cht=p&chds=a&chdl=#{node.keys.join('|')}&chd=t:#{node.values.join(',')}"
+  #haml :hit, :layout => false, :locals => {:c => c, :api => params[:api_key], :stats => node}
 end
 
 

@@ -2,3 +2,8 @@
 	= api
 	"Your IP address is #{request.ip}"
 	You are from #{c.country_name} 
+	- 	stats.each do |k, v|
+		%div
+			= k
+			%span #{v[:hit]},#{v[:percent]}
+	%hr	
