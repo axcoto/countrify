@@ -88,16 +88,15 @@ get '/:api_key/hit' do
   total_hit = 0; 
   node.each { |k, v| total_hit += v }
   
-  # node.each do |country, hit|
-  #   node[country] = {
-  #     :hit => hit, :percent => (hit.to_f / total_hit.to_f * 100).round(0)
-  #   }
-  # end
+  country_code = Array.new 
+  node.each do |country, hit|
+    country_code.push("#{country} - #{(hit.to_f / total_hit.to_f * 100).round(0)}%")
+  end
 
   node.each do |country, hit| 
   end
   size = params[:s] || "300x225"
-  chart_url = "http://chart.apis.google.com/chart?chs=#{size}&cht=p&chds=a&chdl=#{node.keys.join('|')}&chd=t:#{node.values.join(',')}"
+  chart_url = "http://chart.apis.google.com/chart?chs=#{size}&cht=p3&chds=a&chdl=#{country_code.join('|')}&chd=t:#{node.values.join(',')}"
   redirect URI.encode(chart_url)
   #params.inspect
   #haml :hit, :layout => false, :locals => {:c => c, :api => params[:api_key], :stats => node}
