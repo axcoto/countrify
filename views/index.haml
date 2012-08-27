@@ -1,14 +1,21 @@
+%h4.page-header What's Countrify
 .row-fluid
-	%h4.page-header What's Countrify
-	%p Deadly simple visitor tracking by country only. It does nothing, just store data into MongoDB then use gchart api to render the plot.
+	%p A deadly simple country tracking of web visitors. It does nothing fancy, just store data into MongoDB then use gchart api to render the chart. That's it.
 
-	%h4.page-header How to Use
-	%p Very simple. Just include this code: 
-	%code
-		&lt;img src="http://countrify.herokuapp.com/your_api_key/hit?s=WxH" alt= Countrify Tracking" /&gt;
 
-	%h4.page-header Live Example
-	%img{ :src => "http://countrify.herokuapp.com/countrify/hit?s=500x500", :width => "500", :height => "500",:alt => "Live demo of Countrify Tracking" }
+%h4.page-header Live Example
+.row-fluid
+	.span6
+		%img{ :src => "http://countrify.herokuapp.com/countrify/hit?s=500x500", :width => "500", :height => "500",:alt => "Live demo of Countrify Tracking" }
+	.span6
+		%img{ :src => "http://countrify.herokuapp.com/countrify/hit?s=500x500", :width => "500", :height => "500",:alt => "Live demo of Countrify Tracking" }
+
+%h4.page-header How to use
+%p Use the form below to generate a code which embed an image in your website to show the chart.
+
+
+%h4.page-header Generate Code
+.row-fluid
 
 	%form.form-horizontal
 		.control-group
@@ -17,9 +24,29 @@
 			.controls
 				%input.input-xxlarge{:type => 'text'}		
 		.control-group
+			%label.control-label
+				Chart Size
 			.controls
-				%button.btn#apikey-gen{:type => 'submit'} Give me an API KEY		
+				.input-prepend
+					%span.add-on> W = 
+					%input.input-mini{:type => 'text'}>
+					%span.add-on> H =
+					%input.input-mini{:type => 'text'}>
+									
+		.control-group			
+			%label.control-label
+				Chart Type 
+			.controls
+				%select.input-xxlarge{:type => 'text'}		
+					%option{:value => 's'} Bar
+					%option{:value => 'p'} Pie
 
-%script
-
-			
+		.control-group			
+			%label.control-label
+				Embed Code 
+			.controls
+				%input.input-xxlarge#embed-code{:type => 'text'}
+				%button#copy-code.btn Copy
+		.control-group
+			.controls
+				%button.btn#apikey-gen.btn-inverse Give me the code
